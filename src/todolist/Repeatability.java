@@ -1,20 +1,12 @@
 package todolist;
 
+import java.time.LocalDate;
+
 public interface Repeatability {
-    boolean SINGLE = false;
-    boolean EVERYDAY = false;
-    boolean WEEKLY = false;
-    boolean MONTHLY = false;
-    boolean YEARLY = false;
 
-    void SINGLE();
+   boolean appearsIn(LocalDate localDate);
 
-    void EVERYDAY();
+   RepeatTask getRepeatabilityType();
 
-    void WEEKLY();
-
-    void MONTHLY();
-
-    void YEARLY();
 
 }

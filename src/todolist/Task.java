@@ -3,80 +3,64 @@ package todolist;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public abstract class Task {
+public abstract class Task implements Repeatability {
 
-    private String title;
-    private boolean project;
+    private final String title;
+
     int id;
     public static int idCounter = 0;
-    private boolean type;
-    String taskContent;
-    private final LocalDate dateCreate = LocalDate.now();
-    private LocalDate dueDate;
+    private final TypeTask typeTask;
+    private final String taskContent;
 
+    private final LocalDateTime taskDateTime;
 
-    public Task(int id, String title, boolean type, String taskContent, LocalDate dueDate) {
-        if (title == null || title.isEmpty() || title.isBlank())
-            throw new IllegalArgumentException("Напишите заголовок!");
+    public Task(String title, TypeTask typeTask, String taskContent, LocalDateTime taskDateTime) {
         this.title = title;
-        this.project = false;
         this.id = idCounter++;
-        this.type = false;
-        if (taskContent == null || taskContent.isEmpty() || taskContent.isBlank())
-            throw new IllegalArgumentException("Напишите,  что Вы хотите сделать");
+        this.typeTask = typeTask;
+
         this.taskContent = taskContent;
-        this.dueDate = dueDate;
+        this.taskDateTime = taskDateTime;
     }
 
-    public boolean finishTheProject() {
-        return true;
-    }
-
-    public boolean notFinishTheProject() {
-        return false;
-    }
-
-    public void setDueDate(LocalDate dueDate) throws DateTimeException {
-        if (dueDate.compareTo(LocalDate.now()) < 0) {
-            throw new DateTimeException("Прошедшая дата исключается");
-
-
-        }
-        DateTimeFormatter formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.dueDate = LocalDate.parse(dueDate.format(formattedDate));
+    public String getTitle() {
+        return title;
     }
 
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(title, task.title);
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(title);
+
+    public TypeTask getTypeTask() {
+        return typeTask;
     }
+
+    public String getTaskContent() {
+        return taskContent;
+    }
+
+    public LocalDateTime getTaskDateTime() {
+        return taskDateTime;
+    }
+
+    public abstract boolean appearsIn(LocalDate localDate);
+
+    public abstract RepeatTask getRepeatabilityType();
 
     @Override
     public String toString() {
         return "Задача: номер " + id +
                 ", заголовок " + title +
-                ", тип задачи: личная/рабочая " + type +
+                ", тип задачи: личная/рабочая " + typeTask +
                 ", содержание " + taskContent +
-                " , статус " + (project ? "Завершено" : "Не завершено") +
-                ", дата создания" + dateCreate +
-                ", дата выполнения " + dueDate;
+                ", дата выполнения " + taskDateTime;
     }
 
 

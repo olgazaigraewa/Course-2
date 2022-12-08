@@ -12,7 +12,7 @@ public class TodoList  {
 
     // добавить задачу
     public  void addTask (Task task){
-        final var put = this.tasks.put(task.id, task);
+        this.tasks.put(task.getId(), task);
     }
     //получить список задач
     public Collection<Task>getAllTasks() {
@@ -22,7 +22,7 @@ public class TodoList  {
     public Collection<Task>geTasksForDate(LocalDate date) {
          Set<Task> tasksForDate = new HashSet<>();
          for (Task task:tasks.values()){
-             if (task.finishTheProject()){
+             if (task.appearsIn(date)){
                  tasksForDate.add(task);
              }
          }
@@ -37,7 +37,8 @@ public class TodoList  {
             throw new TaskNotFoundException();
         }
     }
-    private class TaskNotFoundException extends Exception {
+
+    public static class TaskNotFoundException extends Exception {
     }
 
 
